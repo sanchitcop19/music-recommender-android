@@ -11,24 +11,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Test',
       darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.green,
-        accentColor: Colors.green
-      ),
+          brightness: Brightness.dark,
+          primarySwatch: Colors.green,
+          accentColor: Colors.lightGreen),
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.green,
-        accentColor: Colors.greenAccent
-      ),
-      home: MyHomePage(title: 'Sanchit Batra'),
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.green,
+          accentColor: Colors.greenAccent),
+      home: MyHomePage(title: 'Music Recommender'),
     );
   }
 }
@@ -52,8 +50,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   String _playlist = "Music Recommendations";
+  static List<Icon> icons = [
+    Icon(Icons.play_arrow),
+    Icon(Icons.pause)
+  ];
+  static var iconIndex = 0;
+  var spotifyIcon = icons[iconIndex];
 
   void play() {
     setState(() {
@@ -62,8 +65,15 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen
-      
-      //play music
+
+      iconIndex = (iconIndex + 1) % 2;
+      spotifyIcon = icons[iconIndex];
+
+      if (iconIndex % 2 == 1){
+        // play music
+        print("playing music");
+      }
+
     });
   }
 
@@ -105,37 +115,45 @@ class _MyHomePageState extends State<MyHomePage> {
             Align(
               alignment: Alignment.topCenter,
               child: DropdownButton<String>(
-              value: _playlist,
-              icon: Icon(Icons.keyboard_arrow_down),
-              iconSize: 30,
-              elevation: 16,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15
-              ),
-              underline: Container(
-                height: 2,
-                color: Colors.white,
-              ),
-              onChanged: (String newValue) {
-                setState(() {
-                  _playlist = newValue;
-                });
-              },
-              items: <String>['Music Recommendations', 'Best of Soen', 'Best of Avenged Sevenfold', 'Best of Tool']
-                .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                })
-                .toList()),
+                  value: _playlist,
+                  icon: Icon(Icons.keyboard_arrow_down),
+                  iconSize: 30,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.white,
+                  ),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      _playlist = newValue;
+                    });
+                  },
+                  items: <String>[
+                    'Music Recommendations',
+                    'Best of Soen',
+                    'Best of Avenged Sevenfold',
+                    'Best of Tool'
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList()),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
               ),
             Text(
-              "Today's recommendation: " + "<Recommendation>",
-              style: TextStyle(
-                fontSize: 15
-              ),
+              "Recommendation of the Day",
+              style: TextStyle(fontSize: 20),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(6),
+            ),
+            Text(
+              "<Recommendation>",
+              style: TextStyle(fontSize: 20),
             )
           ],
         ),
@@ -143,10 +161,9 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: play,
         tooltip: 'Increment',
-        child: Icon(Icons.play_arrow),
-        
+        child: spotifyIcon,
       ),
-       // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
